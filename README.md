@@ -1,7 +1,7 @@
 # MCP23008-I2C Library
-[![Spell Check]()
-[![Compile Examples]()
-[![Generate Doxygen Documentation]()
+[![Spell Check](https://github.com/hasenradball/MCP23008-I2C/actions/workflows/spell_checker.yml/badge.svg)](https://github.com/hasenradball/MCP23008-I2C/actions/workflows/spell_checker.yml)
+[![Compile Examples]()]
+[![Generate Doxygen Documentation](https://github.com/hasenradball/MCP23008-I2C/actions/workflows/doxygen.yml/badge.svg)](https://github.com/hasenradball/MCP23008-I2C/actions/workflows/doxygen.yml)
 
 Arduino Library for MCP23008, a 8-port GPIO exander 
 

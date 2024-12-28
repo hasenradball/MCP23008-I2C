@@ -35,7 +35,7 @@ constexpr uint8_t MCP23008_GPINTEN_REG {0x02};
 constexpr uint8_t MCP23008_DEFVAL_REG {0x03};
 
 /**
- * @brief Interupt Control Register (INTCON)
+ * @brief Interrupt Control Register (INTCON)
  * 
  */
 constexpr uint8_t MCP23008_INTCON_REG {0x04};

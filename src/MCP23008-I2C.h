@@ -264,13 +264,13 @@ namespace MCP23008 {
       bool getPullup8(uint8_t &mask);
 
       /**
-       * @brief Set the Interrupt Control Register for specifed pin (INTCON)
+       * @brief Set the Interrupt Control Register for specified pin (INTCON)
        * 
        * If a bit is set, the corresponding I/O pin is compared
        * against the associated bit in the DEFVAL register. If a
        * bit value is clear, the corresponding I/O pin is compared
 a      * gainst the previous value.
-       * @param pin number of pin to set the interupt (0...7)
+       * @param pin number of pin to set the interrupt (0...7)
        * @param mode mode of interrupt (RISING, FALLING, CHANGE)
        * @return true 
        * @return false 
@@ -281,7 +281,7 @@ a      * gainst the previous value.
        * @brief Disable interrupt on specified pin (INTCON)
        * 
        * @param pin 
-       * @return true number of pin to clear the interupt (0...7)
+       * @return true number of pin to clear the interrupt (0...7)
        * @return false 
        */
       bool disableInterrupt(uint8_t pin);
