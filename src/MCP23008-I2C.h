@@ -16,7 +16,7 @@
  * @brief namespace of MCP23008
  * 
  */
-namespace MCP23008 {
+namespace MCP23008_I2C {
   #define MCP23008_LIB_VERSION              (F("1.0.0"))
 
   constexpr uint8_t MCP23008_OK             {0x00};
@@ -269,7 +269,7 @@ namespace MCP23008 {
        * If a bit is set, the corresponding I/O pin is compared
        * against the associated bit in the DEFVAL register. If a
        * bit value is clear, the corresponding I/O pin is compared
-a      * gainst the previous value.
+       * against the previous value.
        * @param pin number of pin to set the interrupt (0...7)
        * @param mode mode of interrupt (RISING, FALLING, CHANGE)
        * @return true 

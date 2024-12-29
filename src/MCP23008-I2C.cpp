@@ -8,13 +8,14 @@
  * 
  */
 
-#include "MCP23008.h"
+#include "MCP23008-I2C.h"
 #include "MCP23008_registers.h"
+
+using namespace MCP23008_I2C;
 
 MCP23008::MCP23008(uint8_t address, TwoWire *wire)
 : _address{address}, _wire{wire}
 {}
-
 
 bool MCP23008::begin(bool inputPullUp) {
   //  check connected
@@ -29,7 +30,7 @@ bool MCP23008::begin(bool inputPullUp) {
   if (inputPullUp)
   {
     //  Force INPUT_PULLUP
-    if (! writeReg(MCP23x08_PUR_A, 0xFF)) return false;   //  0xFF == all UP
+    if (! writeReg(MCP23008_GPPU_REG, 0xFF)) return false;   //  0xFF == all UP
   }
   return true;
 }
@@ -286,7 +287,6 @@ bool MCP23008::getPullup8(uint8_t &mask) {
   return true;
 }
 
-
 bool MCP23008::setInterrupt(uint8_t pin, uint8_t mode) {
   if (pin > 7)
   {
@@ -342,7 +342,7 @@ uint8_t MCP23008::readInterruptFlagRegister() {
 }
 
 
-uint8_t MCP23008::getInterruptCaptureRegister() {
+uint8_t MCP23008::readInterruptCaptureRegister() {
   return readReg(MCP23008_INTCAP_REG);
 }
 
@@ -358,8 +358,8 @@ bool MCP23008::setInterruptPolarity(uint8_t polarity) {
 
 uint8_t MCP23008::getInterruptPolarity() {
   uint8_t reg = readReg(MCP23008_IOCON_REG);
-  if (reg & MCP23x08_IOCR_ODR) return 2;
-  if (reg & MCP23x08_IOCR_INTPOL) return 1;
+  if (reg & MCP23008_IOCON_ODR) return 2;
+  if (reg & MCP23008_IOCON_INTPOL) return 1;
   return 0;
 }
 
@@ -370,13 +370,13 @@ int MCP23008::lastError() {
 }
 
 /* rename member functions
-bool MCP23008::enableControlRegister(uint8_t mask) {
+bool MCP23008::MCP23008::enableControlRegister(uint8_t mask) {
   uint8_t reg = readReg(MCP23008_IOCON_REG);
   reg |= mask;
   return writeReg(MCP23008_IOCON_REG, reg);
 }
 
-bool MCP23008::disableControlRegister(uint8_t mask) {
+bool MCP23008::MCP23008::disableControlRegister(uint8_t mask) {
   uint8_t reg = readReg(MCP23008_IOCON_REG);
   reg &= ~mask;
   return writeReg(MCP23008_IOCON_REG, reg);
