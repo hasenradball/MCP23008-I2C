@@ -4,7 +4,7 @@
  * @author  Frank Häfele
  * @date    27.12.2024
  * @version 1.0.0
- * @brief   Arduino class for 8-channel port expander MCP23008
+ * @brief   MCP23008 Declarations
  * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
@@ -13,7 +13,8 @@
 #include "Wire.h"
 
 /**
- * @brief namespace of MCP23008
+ * @brief namespace of MCP23008.
+ * includes class declaration, errors, and states 
  * 
  */
 namespace MCP23008_I2C {
@@ -45,9 +46,11 @@ namespace MCP23008_I2C {
        * 
        * Check connection status and set Pull-up resistors if needed (by default).
        * 
-       * @param inputPullUp optional force all inputs with pullup; default = true;
-       * @return true 
-       * @return false 
+       * @param inputPullUp optional force all inputs with Pull-up; default = true;
+       * @return status of begin
+       *
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int8_t begin(bool inputPullUp = true) const;
 
@@ -57,7 +60,7 @@ namespace MCP23008_I2C {
        * @return int8_t status of connection
        * 
        * @retval   1: connection OK
-       * @retval < 0: error code
+       * @retval  <0: error code
        */
       int8_t isConnected() const;
 
@@ -82,8 +85,8 @@ namespace MCP23008_I2C {
        * @param mode mode of pin (INPUT, INPUT_PULLUP, OUTPUT)
        * @return int status of write in IODIR register
        * 
-       * @retval < 0: error code
        * @retval   0: state OK
+       * @retval  <0: error code
        */
       int setPinMode1(uint8_t pin, uint8_t mode) const;
 
@@ -98,8 +101,8 @@ namespace MCP23008_I2C {
        * @param value to write 0/1
        * @return int statusof write in olat register
        * 
-       * @retval < 0: error code
        * @retval   0: state OK
+       * @retval  <0: error code
        */
       int write1(uint8_t pin, uint8_t value) const;
 
@@ -113,7 +116,7 @@ namespace MCP23008_I2C {
        * 
        * @retval    0: pin is in LOW state
        * @retval    1: pin is in HIGH
-       * @retval  < 0: error code
+       * @retval   <0: error code
        */
       int read1(uint8_t pin) const;
 
@@ -127,8 +130,8 @@ namespace MCP23008_I2C {
        * @param reversed true or false
        * @return int status
        * 
-       * @retval < 0: error code
        * @retval   0: state OK
+       * @retval  <0: error code
        */
       int setPolarity(uint8_t pin, bool reversed) const;
 
@@ -141,41 +144,41 @@ namespace MCP23008_I2C {
        * @param pin pin number of pin (0...7)
        * @return int status of polatity for pin
        * 
-       * @retval    0: noninverted => GPIO pin will reflect the same logic state on input pin
-       * @retval    1: inverted => GPIO pin will reflect the opposite logic state on input pin
-       * @retval  < 0: error code
+       * @retval  0: noninverted => GPIO pin will reflect the same logic state on input pin
+       * @retval  1: inverted => GPIO pin will reflect the opposite logic state on input pin
+       * @retval <0: error code
        */
       int getPolarity(uint8_t pin) const;
 
       /**
-       * @brief Set the Pullup register for on pin (GPPU)
+       * @brief Set the Pull-up register for on pin (GPPU)
        * 
        * If a bit is set and the corresponding pin is
        * configured as an input, the corresponding PORT pin is
        * internally pulled up with a 100 kOhm resistor.
        * 
        * @param pin pin number of pin 0...7
-       * @param pullup set pullup true/false
+       * @param pullup set Pull-up true/false
        * @return int status
        * 
-       * @retval < 0: error code
-       * @retval   0: state OK
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int setPullup(uint8_t pin, bool pullup) const;
 
       /**
-       * @brief Get the Pullup register for one pin (GPPU)
+       * @brief Get the Pull-up register for one pin (GPPU)
        * 
        * If a bit is set and the corresponding pin is
        * configured as an input, the corresponding PORT pin is
        * internally pulled up with a 100 kOhm resistor.
        * 
        * @param pin pin number of pin (0...7)
-       * @return int status of pullup for pin
+       * @return int status of Pull-up for pin
        * 
-       * @retval    0: Pull-up disabled
-       * @retval    1: Pull-up enabled
-       * @retval  < 0: error code
+       * @retval  0: Pull-up disabled
+       * @retval  1: Pull-up enabled
+       * @retval <0: error code
        */
       int getPullup(uint8_t pin) const;
 
@@ -204,8 +207,8 @@ namespace MCP23008_I2C {
        * @param mask bit mask to set
        * @return int status of write to I/O Register
        * 
-       * @retval < 0: error code
-       * @retval   0: state OK
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int8_t setPinMode8(uint8_t mask) const;
 
@@ -227,8 +230,8 @@ namespace MCP23008_I2C {
        * @param value value to write in hex, bin or decimal
        * @return int status of write to Output Latch register
        * 
-       * @retval < 0: error code
-       * @retval   0: state OK
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int8_t write8(uint8_t value) const;
 
@@ -239,8 +242,8 @@ namespace MCP23008_I2C {
        * Reading from this register reads the port.
        * @return int status value of GPIO register
        * 
-       * @retval >= 0: register value
-       * @retval  < 0: error code
+       * @retval >=0: register value
+       * @retval  <0: error code
        */
       int read8() const;
 
@@ -258,8 +261,8 @@ namespace MCP23008_I2C {
        * in decimal: 16
        * @return int status
        * 
-       * @retval < 0: error code
-       * @retval   0: state OK
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int8_t setPolarity8(uint8_t mask) const;
 
@@ -269,35 +272,35 @@ namespace MCP23008_I2C {
        * will reflect the inverted value on the pin.
        * @return int status
        * 
-       * @retval >= 0: register value
-       * @retval  < 0: error code
+       * @retval >=0: register value
+       * @retval  <0: error code
        */
       int getPolarity8() const;
 
       /**
-       * @brief Set pullUp for all 8 pins at once (GPPU)
+       * @brief Set Pull-up for all 8 pins at once (GPPU)
        * 
        * If a bit is set and the corresponding pin is
        * configured as an input, the corresponding PORT pin is
        * internally pulled up with a 100 kOhm resistor.
-       * @param mask mask for pullUp to set
+       * @param mask mask for Pull-up to set
        * @return int status
        * 
-       * @retval < 0: error code
-       * @retval   0: state OK
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int8_t setPullup8(uint8_t mask) const;
 
       /**
-       * @brief Get pullUp for all 8 pins at once (GPPU)
+       * @brief Get Pull-up for all 8 pins at once (GPPU)
        * 
        * If a bit is set and the corresponding pin is
        * configured as an input, the corresponding PORT pin is
        * internally pulled up with a 100 kOhm resistor.
        * @return int status
        * 
-       * @retval >= 0: register value
-       * @retval  < 0: error code
+       * @retval >=0: register value
+       * @retval  <0: error code
        */
       int getPullup8() const;
 
@@ -312,8 +315,8 @@ namespace MCP23008_I2C {
        * @param mode mode of interrupt (RISING, FALLING, CHANGE)
        * @return int status
        * 
-       * @retval < 0: error code
        * @retval   0: state OK
+       * @retval  <0: error code
        */
       int setInterrupt(uint8_t pin, uint8_t mode) const;
       
@@ -323,8 +326,8 @@ namespace MCP23008_I2C {
        * @param pin number of pin to clear the interrupt (0...7)
        * @return int status
        * 
-       * @retval < 0: error code
-       * @retval   0: state OK
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int disableInterrupt(uint8_t pin) const;
 
@@ -337,8 +340,8 @@ namespace MCP23008_I2C {
        * associated pin caused the interrupt.
        * @return int read state of interrupt flag register
        *
-       * @retval >= 0 : register value
-       * @retval  < 0 : error code
+       * @retval >=0: register value
+       * @retval  <0: error code
        */
       int readInterruptFlagRegister() const;
 
@@ -347,8 +350,8 @@ namespace MCP23008_I2C {
        * 
        * @return int read state of interrupt capture register
        *
-       * @retval >= 0 : register value
-       * @retval  < 0 : error code
+       * @retval >=0: register value
+       * @retval  <0: error code
        */
       int readInterruptCaptureRegister() const;
 
@@ -367,8 +370,8 @@ namespace MCP23008_I2C {
        * @param polarity value (2...0)
        * @return int status
        * 
-       * @retval < 0: error code
-       * @retval   0: state OK
+       * @retval  0: state OK
+       * @retval <0: error code
        */
       int setInterruptPolarity(uint8_t polarity) const;
 
@@ -378,10 +381,10 @@ namespace MCP23008_I2C {
        * 
        * @return int status
        * 
-       * @retval < 0: error code
-       * @retval   2: Opden-drain (ODR)
-       * @retval   1: active-high
-       * @retval   0: active-low
+       * @retval  2: Opden-drain (ODR)
+       * @retval  1: active-high
+       * @retval  0: active-low
+       * @retval <0: error code
        */
       int getInterruptPolarity() const;
 
@@ -398,8 +401,8 @@ namespace MCP23008_I2C {
        * @param value value to write
        * @return int8_t write status
        *
-       * @retval = 0 : write OK
-       * @retval < 0 : error code
+       * @retval =0: write OK
+       * @retval <0: error code
        */
       int8_t writeReg(uint8_t regAddress, uint8_t value) const;
 
@@ -409,8 +412,8 @@ namespace MCP23008_I2C {
        * @param regAddress address of specific register
        * @return int read status
        *
-       * @retval >= 0 : register value
-       * @retval  < 0 : error code
+       * @retval >=0: register value
+       * @retval  <0: error code
        */
       int readReg(uint8_t regAddress) const;
 

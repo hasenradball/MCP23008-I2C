@@ -5,11 +5,15 @@
  * @author  Frank Häfele
  * @date    27.12.2024
  * @version 1.0.0
- * @brief   Arduino class for 8-channel port expander MCP23008
+ * @brief   MCP23008 Constants and Register short Descriptions
  * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
 
+/**
+ * @brief Namspace of MCP23008 Constants.
+ * Contains mainly the register description
+ */
 namespace MCP23008_Constants {
    
   /**

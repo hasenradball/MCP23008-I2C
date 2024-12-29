@@ -3,7 +3,7 @@
  * @author  Frank Häfele
  * @date    27.12.2024
  * @version 1.0.0
- * @brief   Arduino class for 8-channel port expander MCP23008
+ * @brief   MCP23008 Function and Class Definitions
  * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
