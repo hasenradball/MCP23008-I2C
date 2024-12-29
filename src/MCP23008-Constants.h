@@ -1,15 +1,17 @@
 #pragma once
 
 /**
- * @file    MCP23008
+ * @file    MCP23008-Constants.h
  * @author  Frank Häfele
  * @date    27.12.2024
  * @version 1.0.0
  * @brief   Arduino class for 8-channel port expander MCP23008
- * @see     tbd
+ * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
 
+namespace MCP23008_Constants {
+   
   /**
    * @brief I/O Direction Register Address (IODIR)
    * 
@@ -118,3 +120,5 @@
    * INT pin as active push-pull.
    */
   constexpr uint8_t MCP23008_IOCON_INTPOL {0x02};
+
+}

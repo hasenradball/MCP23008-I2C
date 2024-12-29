@@ -16,16 +16,17 @@ begin                        KEYWORD2
 isConnected                  KEYWORD2
 getAddress                   KEYWORD2
 
-pinMode1                     KEYWORD2
+setPinMode1                  KEYWORD2
 write1                       KEYWORD2
 read1                        KEYWORD2
 
 setPolarity                  KEYWORD2
+getPinMode8                  KEYWORD2
 getPolarity                  KEYWORD2
 setPullup                    KEYWORD2
 getPullup                    KEYWORD2
 
-pinMode8                     KEYWORD2
+setPinMode8                  KEYWORD2
 write8                       KEYWORD2
 read8                        KEYWORD2
 setPolarity8                 KEYWORD2
@@ -40,8 +41,7 @@ readInterruptFlagRegister    KEYWORD2
 readInterruptCaptureRegister KEYWORD2
 setInterruptPolarity         KEYWORD2
 getInterruptPolarity         KEYWORD2
-lastError                    KEYWORD2
-getPinMode8                  KEYWORD2
+
 
 ##################################
 # Instances (KEYWORD2)
@@ -51,13 +51,10 @@ getPinMode8                  KEYWORD2
 # Constants (LITERAL1)
 ##################################
 
-MCP23008_OK                  LITERAL1
-MCP23008_PIN_ERROR           LITERAL1
-MCP23008_I2C_ERROR           LITERAL1
-MCP23008_VALUE_ERROR         LITERAL1
-MCP23008_PORT_ERROR          LITERAL1
-MCP23008_REGISTER_ERROR      LITERAL1
-MCP23008_INVALID_READ        LITERAL1
+MCP23008_STATE_OK            LITERAL1
+MCP23008_ERROR_PIN           LITERAL1
+MCP23008_ERROR_I2C           LITERAL1
+MCP23008_ERROR_VALUE         LITERAL1
 
 MCP23008_IODIR_REG           LITERAL1
 MCP23008_IPOL_REG            LITERAL1

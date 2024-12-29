@@ -1,11 +1,11 @@
 #pragma once
 /**
- * @file    MCP23008.h
+ * @file    MCP23008-I2C.h
  * @author  Frank Häfele
  * @date    27.12.2024
  * @version 1.0.0
  * @brief   Arduino class for 8-channel port expander MCP23008
- * @see     tbd
+ * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
 
@@ -17,16 +17,14 @@
  * 
  */
 namespace MCP23008_I2C {
-  #define MCP23008_LIB_VERSION              (F("1.0.0"))
 
-  constexpr uint8_t MCP23008_OK             {0x00};
-  constexpr uint8_t MCP23008_PIN_ERROR      {0x81};
-  constexpr uint8_t MCP23008_I2C_ERROR      {0x82};
-  constexpr uint8_t MCP23008_VALUE_ERROR    {0x83};
-  constexpr uint8_t MCP23008_PORT_ERROR     {0x84};
-  constexpr uint8_t MCP23008_REGISTER_ERROR {0xFF};
-  constexpr uint8_t MCP23008_INVALID_READ   {0xFF};
+  constexpr const char *MCP23008_LIB_VERSION   {"1.0.0"};
 
+  constexpr int8_t MCP23008_STATE_OK           {0x00};
+  
+  constexpr int8_t MCP23008_ERROR_PIN          {-1};
+  constexpr int8_t MCP23008_ERROR_I2C          {-2};
+  constexpr int8_t MCP23008_ERROR_VALUE        {-3};
 
   /**
    * @brief Class MCP23008
@@ -45,19 +43,23 @@ namespace MCP23008_I2C {
       /**
        * @brief init MCP23008 instance
        * 
+       * Check connection status and set Pull-up resistors if needed (by default).
+       * 
        * @param inputPullUp optional force all inputs with pullup; default = true;
        * @return true 
        * @return false 
        */
-      bool begin(bool inputPullUp = true);
+      int8_t begin(bool inputPullUp = true) const;
 
       /**
        * @brief check connection status
        * 
-       * @return true 
-       * @return false 
+       * @return int8_t status of connection
+       * 
+       * @retval   1: connection OK
+       * @retval < 0: error code
        */
-      bool isConnected();
+      int8_t isConnected() const;
 
       /**
        * @brief Get the address of device
@@ -78,10 +80,12 @@ namespace MCP23008_I2C {
        * 
        * @param pin pin number of pin 0...7
        * @param mode mode of pin (INPUT, INPUT_PULLUP, OUTPUT)
-       * @return true 
-       * @return false 
+       * @return int status of write in IODIR register
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool pinMode1(uint8_t pin, uint8_t mode);
+      int setPinMode1(uint8_t pin, uint8_t mode) const;
 
       /**
        * @brief write value for a single pin to OLAT register (OLAT)
@@ -92,10 +96,12 @@ namespace MCP23008_I2C {
        * configured as outputs.
        * @param pin pin number of pin 0...7
        * @param value to write 0/1
-       * @return true 
-       * @return false 
+       * @return int statusof write in olat register
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool write1(uint8_t pin, uint8_t value);
+      int write1(uint8_t pin, uint8_t value) const;
 
       /**
        * @brief read value for a single pin from GPIO register (GPIO)
@@ -103,9 +109,13 @@ namespace MCP23008_I2C {
        * The GPIO register reflects the value on the port.
        * Reading from this register reads the port.
        * @param pin pin number of pin 0...7
-       * @return uint8_t value of pin 0/1
+       * @return int status of gpio register for pin
+       * 
+       * @retval    0: pin is in LOW state
+       * @retval    1: pin is in HIGH
+       * @retval  < 0: error code
        */
-      uint8_t read1(uint8_t pin);
+      int read1(uint8_t pin) const;
 
       /**
        * @brief Set the polarity of a single pin in the Input polarity register (IPOL)
@@ -115,10 +125,12 @@ namespace MCP23008_I2C {
        * 
        * @param pin pin number of pin 0...7
        * @param reversed true or false
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool setPolarity(uint8_t pin, bool reversed);
+      int setPolarity(uint8_t pin, bool reversed) const;
 
       /**
        * @brief Get the polarity of a single pin of Input polarity register (IPOL)
@@ -126,12 +138,14 @@ namespace MCP23008_I2C {
        * If a bit is set, the corresponding GPIO register bit 
        * will reflect the inverted value on the pin.
        * 
-       * @param pin pin number of pin 0...7
-       * @param reversed reference of data memory to hold the value
-       * @return true 
-       * @return false 
+       * @param pin pin number of pin (0...7)
+       * @return int status of polatity for pin
+       * 
+       * @retval    0: noninverted => GPIO pin will reflect the same logic state on input pin
+       * @retval    1: inverted => GPIO pin will reflect the opposite logic state on input pin
+       * @retval  < 0: error code
        */
-      bool getPolarity(uint8_t pin, bool &reversed);
+      int getPolarity(uint8_t pin) const;
 
       /**
        * @brief Set the Pullup register for on pin (GPPU)
@@ -142,10 +156,12 @@ namespace MCP23008_I2C {
        * 
        * @param pin pin number of pin 0...7
        * @param pullup set pullup true/false
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool setPullup(uint8_t pin, bool pullup);
+      int setPullup(uint8_t pin, bool pullup) const;
 
       /**
        * @brief Get the Pullup register for one pin (GPPU)
@@ -154,12 +170,14 @@ namespace MCP23008_I2C {
        * configured as an input, the corresponding PORT pin is
        * internally pulled up with a 100 kOhm resistor.
        * 
-       * @param pin pin number of pin 0...7
-       * @param pullup reference of memory to hold the value
-       * @return true 
-       * @return false 
+       * @param pin pin number of pin (0...7)
+       * @return int status of pullup for pin
+       * 
+       * @retval    0: Pull-up disabled
+       * @retval    1: Pull-up enabled
+       * @retval  < 0: error code
        */
-      bool getPullup(uint8_t pin, bool &pullup);
+      int getPullup(uint8_t pin) const;
 
 
       /* #################################### */
@@ -184,11 +202,20 @@ namespace MCP23008_I2C {
        * 
        * in decimal: 16
        * @param mask bit mask to set
-       * @return true 
-       * @return false 
+       * @return int status of write to I/O Register
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool pinMode8(uint8_t mask);
+      int8_t setPinMode8(uint8_t mask) const;
 
+      /**
+       * @brief Read I/O Direction register (IODIR)
+       * 
+       * @return value of register
+       */
+      int getPinMode8() const;
+      
       /**
        * @brief write 8-bit value at once to Output Latch register (OLAT)
        * 
@@ -198,19 +225,24 @@ namespace MCP23008_I2C {
        * modifies the output latches that modify the pins
        * configured as outputs.
        * @param value value to write in hex, bin or decimal
-       * @return true 
-       * @return false 
+       * @return int status of write to Output Latch register
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool write8(uint8_t value);
+      int8_t write8(uint8_t value) const;
 
       /**
        * @brief read 8 bit at once from GPIO register (GPIO)
        * 
        * The GPIO register reflects the value on the port.
        * Reading from this register reads the port.
-       * @return int value of output latch register
+       * @return int status value of GPIO register
+       * 
+       * @retval >= 0: register value
+       * @retval  < 0: error code
        */
-      int read8();
+      int read8() const;
 
       /**
        * @brief Set the polarity in 8-bit at once in Input polarity register (IPOL)
@@ -224,20 +256,23 @@ namespace MCP23008_I2C {
        * in binary:  0b00010000
        * 
        * in decimal: 16
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool setPolarity8(uint8_t mask);
+      int8_t setPolarity8(uint8_t mask) const;
 
       /**
        * @brief Get the polarity in 8-bit at once in Input polarity register (IPOL)
        * If a bit is set, the corresponding GPIO register bit 
        * will reflect the inverted value on the pin.
-       * @param mask memory to store the value
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval >= 0: register value
+       * @retval  < 0: error code
        */
-      bool getPolarity8(uint8_t &mask);
+      int getPolarity8() const;
 
       /**
        * @brief Set pullUp for all 8 pins at once (GPPU)
@@ -246,10 +281,12 @@ namespace MCP23008_I2C {
        * configured as an input, the corresponding PORT pin is
        * internally pulled up with a 100 kOhm resistor.
        * @param mask mask for pullUp to set
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool setPullup8(uint8_t mask);
+      int8_t setPullup8(uint8_t mask) const;
 
       /**
        * @brief Get pullUp for all 8 pins at once (GPPU)
@@ -257,11 +294,12 @@ namespace MCP23008_I2C {
        * If a bit is set and the corresponding pin is
        * configured as an input, the corresponding PORT pin is
        * internally pulled up with a 100 kOhm resistor.
-       * @param mask 
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval >= 0: register value
+       * @retval  < 0: error code
        */
-      bool getPullup8(uint8_t &mask);
+      int getPullup8() const;
 
       /**
        * @brief Set the Interrupt Control Register for specified pin (INTCON)
@@ -272,19 +310,23 @@ namespace MCP23008_I2C {
        * against the previous value.
        * @param pin number of pin to set the interrupt (0...7)
        * @param mode mode of interrupt (RISING, FALLING, CHANGE)
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool setInterrupt(uint8_t pin, uint8_t mode);
+      int setInterrupt(uint8_t pin, uint8_t mode) const;
       
       /**
        * @brief Disable interrupt on specified pin (INTCON)
        * 
-       * @param pin 
-       * @return true number of pin to clear the interrupt (0...7)
-       * @return false 
+       * @param pin number of pin to clear the interrupt (0...7)
+       * @return int status
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool disableInterrupt(uint8_t pin);
+      int disableInterrupt(uint8_t pin) const;
 
       /**
        * @brief Read the Interrupt Flag Register (INTF)
@@ -293,16 +335,22 @@ namespace MCP23008_I2C {
        * PORT pins of any pin that is enabled for interrupts via
        * the GPINTEN register. A ‘set’ bit indicates that the
        * associated pin caused the interrupt.
-       * @return uint8_t value of register
+       * @return int read state of interrupt flag register
+       *
+       * @retval >= 0 : register value
+       * @retval  < 0 : error code
        */
-      uint8_t readInterruptFlagRegister();
+      int readInterruptFlagRegister() const;
 
       /**
        * @brief Read the interrupt capture register (INTCAP)
        * 
-       * @return uint8_t value of interrupt capture register
+       * @return int read state of interrupt capture register
+       *
+       * @retval >= 0 : register value
+       * @retval  < 0 : error code
        */
-      uint8_t readInterruptCaptureRegister();
+      int readInterruptCaptureRegister() const;
 
       /**
        * @brief Set the Interrupt Polarity in IOCON Register
@@ -317,38 +365,30 @@ namespace MCP23008_I2C {
        * 0 = active-low
        * 
        * @param polarity value (2...0)
-       * @return true 
-       * @return false 
+       * @return int status
+       * 
+       * @retval < 0: error code
+       * @retval   0: state OK
        */
-      bool setInterruptPolarity(uint8_t polarity);
+      int setInterruptPolarity(uint8_t polarity) const;
 
 
       /**
        * @brief Read the Interrupt Polarity
        * 
-       * @return uint8_t 2 = ODR; 1 = active-high; 0 = active-low
-       */
-      uint8_t getInterruptPolarity();
-
-      /**
-       * @brief Get last error for debugging
+       * @return int status
        * 
-       * @return int error value
+       * @retval < 0: error code
+       * @retval   2: Opden-drain (ODR)
+       * @retval   1: active-high
+       * @retval   0: active-low
        */
-      int lastError();
+      int getInterruptPolarity() const;
 
       /* rename member functions set/clear IOCR bit fields
       bool     enableControlRegister(uint8_t mask);
       bool     disableControlRegister(uint8_t mask);
       */
-
-      /**
-       * @brief Read I/O Direction register (IODIR)
-       * 
-       * @return value of register
-       */
-      uint8_t  getPinMode8();
-
 
     protected:
       /**
@@ -356,18 +396,23 @@ namespace MCP23008_I2C {
        * 
        * @param regAddress address of specific register
        * @param value value to write
-       * @return true 
-       * @return false 
+       * @return int8_t write status
+       *
+       * @retval = 0 : write OK
+       * @retval < 0 : error code
        */
-      bool writeReg(uint8_t regAddress, uint8_t value);
+      int8_t writeReg(uint8_t regAddress, uint8_t value) const;
 
       /**
        * @brief I2c Read value of MCP23008 register
        * 
        * @param regAddress address of specific register
-       * @return uint8_t value of register read
+       * @return int read status
+       *
+       * @retval >= 0 : register value
+       * @retval  < 0 : error code
        */
-      uint8_t readReg(uint8_t regAddress);
+      int readReg(uint8_t regAddress) const;
 
       /**
        * @brief address of MCP23008 device
@@ -380,11 +425,5 @@ namespace MCP23008_I2C {
        * 
        */
       TwoWire* _wire;
-
-      /**
-       * @brief memory for last error
-       * 
-       */
-      uint8_t _error {MCP23008_OK};
   };
 }

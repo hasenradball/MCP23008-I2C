@@ -1,372 +1,298 @@
 /**
- * @file    MCP23008
+ * @file    MCP23008-I2c.cpp
  * @author  Frank Häfele
  * @date    27.12.2024
  * @version 1.0.0
  * @brief   Arduino class for 8-channel port expander MCP23008
- * @see     tbd
+ * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
 
 #include "MCP23008-I2C.h"
-#include "MCP23008_registers.h"
+#include "MCP23008-Constants.h"
 
 using namespace MCP23008_I2C;
+using namespace MCP23008_Constants;
 
 MCP23008::MCP23008(uint8_t address, TwoWire *wire)
 : _address{address}, _wire{wire}
 {}
 
-bool MCP23008::begin(bool inputPullUp) {
-  //  check connected
-  if (! isConnected()) return false;
-
-  //  disable address increment (datasheet P20
-  //    SEQOP: Sequential Operation mode bit
-  //    1 = Sequential operation disabled, address pointer does not increment.
-  //    0 = Sequential operation enabled, address pointer increments.
-  //  if (! writeReg(MCP23x08_IOCR, MCP23008_IOCON_SEQOP)) return false;
-
-  if (inputPullUp)
-  {
-    //  Force INPUT_PULLUP
-    if (! writeReg(MCP23008_GPPU_REG, 0xFF)) return false;   //  0xFF == all UP
+int8_t MCP23008::begin(bool inputPullUp) const {
+  if (!isConnected()) {
+    return MCP23008_ERROR_I2C;
   }
-  return true;
+  if (inputPullUp) {
+    // Force INPUT_PULLUP for all pins => write 0xFF
+    return writeReg(MCP23008_GPPU_REG, 0xFF);
+  }
+  return MCP23008_STATE_OK;
 }
 
 
-bool MCP23008::isConnected() {
+int8_t MCP23008::isConnected() const {
   _wire->beginTransmission(_address);
-  if (_wire->endTransmission() != 0)
-  {
-    _error = MCP23008_I2C_ERROR;
-    return false;
+  if (_wire->endTransmission() != 0) {
+    return MCP23008_ERROR_I2C;
   }
-  _error = MCP23008_OK;
-  return true;
+  return 1;
 }
 
 /* #################################### */
 /* ### --- single pin interface --- ### */
 /* #################################### */
-bool MCP23008::pinMode1(uint8_t pin, uint8_t mode) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::setPinMode1(uint8_t pin, uint8_t mode) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  if ((mode != INPUT) && (mode != INPUT_PULLUP) && (mode != OUTPUT))
-  {
-    _error = MCP23008_VALUE_ERROR;
-    return false;
+  if ((mode != INPUT) && (mode != INPUT_PULLUP) && (mode != OUTPUT)) {
+    return MCP23008_ERROR_VALUE;
   }
 
-  uint8_t val = readReg(MCP23008_IODIR_REG);
-  if (_error != MCP23008_OK)
-  {
-    return false;
+  int iodir = readReg(MCP23008_IODIR_REG);
+  if (iodir < 0) {
+    return iodir;
   }
   uint8_t mask = 1 << pin;
-  //  only work with valid
-  if ((mode == INPUT) || (mode == INPUT_PULLUP))
-  {
-    val |= mask;
+  // only work with valid
+  if ((mode == INPUT) || (mode == INPUT_PULLUP)) {
+    iodir |= mask;
   }
-  else if (mode == OUTPUT)
-  {
-    val &= ~mask;
+  else if (mode == OUTPUT) {
+    iodir &= ~mask;
   }
-  // other values won't change val ....
-  writeReg(MCP23008_IODIR_REG, val);
-  if (_error != MCP23008_OK)
-  {
-    return false;
-  }
-  return true;
+  // other values won't change iodir
+  return writeReg(MCP23008_IODIR_REG, iodir);
 }
 
 
-bool MCP23008::write1(uint8_t pin, uint8_t value) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::write1(uint8_t pin, uint8_t value) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  uint8_t val = readReg(MCP23008_OLAT_REG);
-  uint8_t pre = val;
-  if (_error != MCP23008_OK)
-  {
-    return false;
+  int olat = readReg(MCP23008_OLAT_REG);
+  if (olat < 0 ) {
+    return olat;
   }
+  int pre = olat;
 
   uint8_t mask = 1 << pin;
-  if (value)
-  {
-    val |= mask;
+  if (value) {
+    olat |= mask;
   }
-  else
-  {
-    val &= ~mask;
+  else {
+    olat &= ~mask;
   }
-  //  only write when changed.
-  if (pre != val)
-  {
-    writeReg(MCP23008_OLAT_REG, val);
-    if (_error != MCP23008_OK)
-    {
-      return false;
-    }
+  // only write when changed.
+  if (pre != olat) {
+    return writeReg(MCP23008_OLAT_REG, olat);
   }
-  return true;
+  return MCP23008_STATE_OK;
 }
 
 
-uint8_t MCP23008::read1(uint8_t pin) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return MCP23008_INVALID_READ;
+int MCP23008::read1(uint8_t pin) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  uint8_t val = readReg(MCP23008_GPIO_REG);
-  if (_error != MCP23008_OK)
-  {
-    return MCP23008_INVALID_READ;
+  int gpio = readReg(MCP23008_GPIO_REG);
+  if (gpio < 0) {
+    return gpio;
   }
   uint8_t mask = 1 << pin;
-  if (val & mask) return HIGH;
-  return LOW;
+  if (gpio & mask) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
 }
 
 
-bool MCP23008::setPolarity(uint8_t pin,  bool reversed) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::setPolarity(uint8_t pin,  bool reversed) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  uint8_t val = readReg(MCP23008_IPOL_REG);
-  if (_error != MCP23008_OK)
-  {
-    return false;
+  int ipol = readReg(MCP23008_IPOL_REG);
+  if (ipol < 0) {
+    return ipol;
   }
   uint8_t mask = 1 << pin;
-  if (reversed)
-  {
-    val |= mask;
+  if (reversed) {
+    ipol |= mask;
   }
-  else
-  {
-    val &= ~mask;
+  else {
+    ipol &= ~mask;
   }
-  writeReg(MCP23008_IPOL_REG, val);
-  if (_error != MCP23008_OK)
-  {
-    return false;
-  }
-  return true;
+  return writeReg(MCP23008_IPOL_REG, ipol);;
 }
 
 
-bool MCP23008::getPolarity(uint8_t pin, bool &reversed) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::getPolarity(uint8_t pin) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  uint8_t val = readReg(MCP23008_IPOL_REG);
-  if (_error != MCP23008_OK)
-  {
-    return false;
+  int ipol = readReg(MCP23008_IPOL_REG);
+  if (ipol < 0) {
+    return ipol;
   }
   uint8_t mask = 1 << pin;
-  reversed = (val & mask) > 0;
-  return true;
+  return (ipol & mask) > 0;
 }
 
-bool MCP23008::setPullup(uint8_t pin,  bool pullup) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::setPullup(uint8_t pin, bool pullup) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  uint8_t val = readReg(MCP23008_GPPU_REG);
-  if (_error != MCP23008_OK)
-  {
-    return false;
+  int gppu = readReg(MCP23008_GPPU_REG);
+  if (gppu < 0) {
+    return gppu;
   }
   uint8_t mask = 1 << pin;
-  if (pullup)
-  {
-    val |= mask;
+  if (pullup) {
+    gppu |= mask;
   }
-  else
-  {
-    val &= ~mask;
+  else {
+    gppu &= ~mask;
   }
-  writeReg(MCP23008_GPPU_REG, val);
-  if (_error != MCP23008_OK)
-  {
-    return false;
-  }
-  return true;
+  return writeReg(MCP23008_GPPU_REG, gppu);
 }
 
 
-bool MCP23008::getPullup(uint8_t pin, bool &pullup) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::getPullup(uint8_t pin) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  uint8_t val = readReg(MCP23008_GPPU_REG);
-  if (_error != MCP23008_OK)
-  {
-    return false;
+  int gppu = readReg(MCP23008_GPPU_REG);
+  if (gppu < 0) {
+    return gppu;
   }
   uint8_t mask = 1 << pin;
-  pullup = (val & mask) > 0;
-  return true;
+  return (gppu & mask) > 0;
 }
 
 /* #################################### */
 /* ### ---  8 - pin interface   --- ### */
 /* #################################### */
 
-bool MCP23008::pinMode8(uint8_t mask) {
-  writeReg(MCP23008_IODIR_REG, mask);
-  _error = MCP23008_OK;
-  return true;
+int8_t MCP23008::setPinMode8(uint8_t mask) const {
+  return writeReg(MCP23008_IODIR_REG, mask);
 }
 
-bool MCP23008::write8(uint8_t value) {
-  writeReg(MCP23008_OLAT_REG, value);
-  _error = MCP23008_OK;
-  return true;
+int MCP23008::getPinMode8() const {
+  return readReg(MCP23008_IODIR_REG);
 }
 
-int MCP23008::read8() {
-  _error = MCP23008_OK;
+int8_t MCP23008::write8(uint8_t value) const {
+  return writeReg(MCP23008_OLAT_REG, value);
+}
+
+int MCP23008::read8() const {
   return readReg(MCP23008_GPIO_REG);
 }
 
-bool MCP23008::setPolarity8(uint8_t mask) {
-  writeReg(MCP23008_IPOL_REG, mask);
-  if (_error != MCP23008_OK)
-  {
-    return false;
-  }
-  return true;
+int8_t MCP23008::setPolarity8(uint8_t mask) const {
+  return writeReg(MCP23008_IPOL_REG, mask);
 }
 
-bool MCP23008::getPolarity8(uint8_t &mask) {
-  mask = readReg(MCP23008_IPOL_REG);
-  if (_error != MCP23008_OK)
-  {
-    return false;
-  }
-  return true;
+int MCP23008::getPolarity8() const {
+  return readReg(MCP23008_IPOL_REG);
 }
 
-bool MCP23008::setPullup8(uint8_t mask) {
-  writeReg(MCP23008_GPPU_REG, mask);
-  if (_error != MCP23008_OK)
-  {
-    return false;
-  }
-  return true;
+int8_t MCP23008::setPullup8(uint8_t mask) const {
+  return writeReg(MCP23008_GPPU_REG, mask);
 }
 
-
-bool MCP23008::getPullup8(uint8_t &mask) {
-  mask = readReg(MCP23008_GPPU_REG);
-  if (_error != MCP23008_OK)
-  {
-    return false;
-  }
-  return true;
+int MCP23008::getPullup8() const {
+  return readReg(MCP23008_GPPU_REG);
 }
 
-bool MCP23008::setInterrupt(uint8_t pin, uint8_t mode) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::setInterrupt(uint8_t pin, uint8_t mode) const {
+  int8_t state;
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-
-  // right mode
-  uint8_t intcon = readReg(MCP23008_INTCON_REG);
-  if (mode == CHANGE)
-  {
+  int8_t intcon = readReg(MCP23008_INTCON_REG);
+  if (intcon < 0) {
+    return intcon;
+  }
+  if (mode == CHANGE) {
     // compare to previous value.
     intcon &= ~(1 << pin);
   }
-  else
-  {
-    uint8_t defval = readReg(MCP23008_DEFVAL_REG);
-    if (mode == RISING)
-    {
+  else {
+    int8_t defval = readReg(MCP23008_DEFVAL_REG);
+    if (defval < 0) {
+      return defval;
+    }
+    if (mode == RISING) {
       intcon |= (1 << pin);
       defval &= ~(1 << pin);  // RISING == compare to 0
     }
-    else if (mode == FALLING)
-    {
+    else if (mode == FALLING) {
       intcon |= (1 << pin);
       defval |= ~(1 << pin);  // FALLING == compare to 1
     }
-    writeReg(MCP23008_DEFVAL_REG, defval);
+    if ((state = writeReg(MCP23008_DEFVAL_REG, defval)) < 0) {
+      return state;
+    }
   }
-  writeReg(MCP23008_INTCON_REG, intcon);
+  if ((state = writeReg(MCP23008_INTCON_REG, intcon)) < 0) {
+    return state;
+  }
 
   // enable interrupt
-  uint16_t value = readReg(MCP23008_GPINTEN_REG);
+  int8_t value = readReg(MCP23008_GPINTEN_REG);
+  if (value < 0) {
+    return value;
+  }
   value |= (1 << pin);
   return writeReg(MCP23008_GPINTEN_REG, value);
 }
 
 
-bool MCP23008::disableInterrupt(uint8_t pin) {
-  if (pin > 7)
-  {
-    _error = MCP23008_PIN_ERROR;
-    return false;
+int MCP23008::disableInterrupt(uint8_t pin) const {
+  if (pin > 7) {
+    return MCP23008_ERROR_PIN;
   }
-  //  disable interrupt
-  uint16_t value = readReg(MCP23008_GPINTEN_REG);
-  value &= ~(1 << pin);
-  return writeReg(MCP23008_GPINTEN_REG, value);
+  // disable interrupt
+  int8_t reg = readReg(MCP23008_GPINTEN_REG);
+  if (reg < 0) {
+    return reg;
+  }
+  reg &= ~(1 << pin);
+  return writeReg(MCP23008_GPINTEN_REG, reg);
 }
 
-uint8_t MCP23008::readInterruptFlagRegister() {
+int MCP23008::readInterruptFlagRegister() const {
   return readReg(MCP23008_INTF_REG);
 }
 
-
-uint8_t MCP23008::readInterruptCaptureRegister() {
+int MCP23008::readInterruptCaptureRegister() const {
   return readReg(MCP23008_INTCAP_REG);
 }
 
-bool MCP23008::setInterruptPolarity(uint8_t polarity) {
-  if (polarity > 2) return false;
-  uint8_t reg = readReg(MCP23008_IOCON_REG);
+int MCP23008::setInterruptPolarity(uint8_t polarity) const {
+  if (polarity > 2) {
+    return MCP23008_ERROR_VALUE;
+  }
+  int reg = readReg(MCP23008_IOCON_REG);
+  if (reg < 0) {
+    return reg;
+  }
   reg &= ~(MCP23008_IOCON_ODR | MCP23008_IOCON_INTPOL);
-  //  LOW is default set.
+  //  LOW is default set
   if (polarity == 2) reg |= MCP23008_IOCON_ODR;
   if (polarity == 1) reg |= MCP23008_IOCON_INTPOL;
   return writeReg(MCP23008_IOCON_REG, reg);
 }
 
-uint8_t MCP23008::getInterruptPolarity() {
-  uint8_t reg = readReg(MCP23008_IOCON_REG);
+int MCP23008::getInterruptPolarity() const {
+  int reg = readReg(MCP23008_IOCON_REG);
+  if (reg < 0) return reg;
   if (reg & MCP23008_IOCON_ODR) return 2;
   if (reg & MCP23008_IOCON_INTPOL) return 1;
   return 0;
-}
-
-int MCP23008::lastError() {
-  int e = _error;
-  _error = MCP23008_OK;  //  reset error after read.
-  return e;
 }
 
 /* rename member functions
@@ -383,37 +309,25 @@ bool MCP23008::MCP23008::disableControlRegister(uint8_t mask) {
 }
 */
 
-uint8_t MCP23008::getPinMode8() {
-  return readReg(MCP23008_IODIR_REG);
-}
-
-bool MCP23008::writeReg(uint8_t regAddress, uint8_t value) {
+int8_t MCP23008::writeReg(uint8_t regAddress, uint8_t value) const {
   _wire->beginTransmission(_address);
   _wire->write(regAddress);
   _wire->write(value);
-  if (_wire->endTransmission() != 0)
-  {
-    _error = MCP23008_I2C_ERROR;
-    return false;
+  if (_wire->endTransmission() != 0) {
+    return MCP23008_ERROR_I2C;
   }
-  _error = MCP23008_OK;
-  return true;
+  return MCP23008_STATE_OK;
 }
 
-uint8_t MCP23008::readReg(uint8_t regAddress) {
+int MCP23008::readReg(uint8_t regAddress) const {
   _wire->beginTransmission(_address);
   _wire->write(regAddress);
-  if (_wire->endTransmission() != 0)
-  {
-    _error = MCP23008_I2C_ERROR;
-    return 0;
+  if (_wire->endTransmission() != 0) {
+    return MCP23008_ERROR_I2C;
   }
   uint8_t n = _wire->requestFrom(_address, (uint8_t)1);
-  if (n != 1)
-  {
-    _error = MCP23008_I2C_ERROR;
-    return 0;
+  if (n != 1) {
+    return MCP23008_ERROR_I2C;
   }
-  _error = MCP23008_OK;
   return _wire->read();
 }
