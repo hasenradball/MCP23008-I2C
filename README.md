@@ -5,7 +5,7 @@
 
 Arduino Library for MCP23008, a 8-port GPIO exander 
 
-![](docs/MCP23008_adapter.png)
+![MPC23008_adapter.png](docs/MCP23008_adapter.png)
 
 ## Contents
 * [Library Documentation](#library-documentation)
@@ -14,8 +14,9 @@ Arduino Library for MCP23008, a 8-port GPIO exander
 * [Helpful Links](#helpful-links)
 
 ## Library Documentation
-The library documentaition ins mainly placed in the following pdf document [refman.pdf](./docs/latex/refman.pdf).<br>
+The library documentation is mainly placed in the following pdf document [refman.pdf](./docs/latex/refman.pdf) or located under the following github pages [github.io](https://hasenradball.github.io/MCP23008-I2C).<br>
 Additionally in combination with the technical datasheet of microchip [MCP23008-Datasheet](./docs/MCP23008-Datasheet.pdf).
+
 
 ## Library Usage
 ### Controllers

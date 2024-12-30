@@ -234,7 +234,10 @@ namespace MCP23008_I2C {
       /**
        * @brief Read I/O Direction register (IODIR)
        * 
-       * @return value of register
+       * @return state of I/O direction register
+       * 
+       * @retval >=0: register value
+       * @retval  <0: error code
        */
       int getPinMode8() const;
       
