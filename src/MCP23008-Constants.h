@@ -11,7 +11,7 @@
  */
 
 /**
- * @brief Namspace of MCP23008 Constants.
+ * @brief Namespace of MCP23008 Constants.
  * Contains mainly the register description
  */
 namespace MCP23008_Constants {
