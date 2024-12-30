@@ -6,8 +6,6 @@
 Arduino Library for MCP23008, a 8-port GPIO exander 
 
 ![](docs/MCP23008_adapter.png)
-![](MCP23008_adapter.png)
-
 
 ## Contents
 * [Library Documentation](#library-documentation)
