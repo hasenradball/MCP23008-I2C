@@ -415,7 +415,7 @@ namespace MCP23008_I2C {
       bool     disableControlRegister(uint8_t mask);
       */
 
-    protected:
+    private:
       /**
        * @brief I2C write value to MCP23008 register
        * 
