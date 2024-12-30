@@ -1,8 +1,20 @@
+/**
+ * @file    ESP8266_pinmode_example.ino
+ * @author  Frank Häfele(mail@frankhaefele.de)
+ * @brief   Example to demonstrate how to se pinMode on MCP23008 device
+ * @version 0.1
+ * @date    2024-12-30
+ * 
+ * @copyright Copyright (c) 2024 Frank Häfele
+ * 
+ */
+
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <Wire.h>
 #include <MCP23008-I2C.h>
 
+// ESP-01
 constexpr int SDA_PIN {0};
 constexpr int SCL_PIN {2};
 

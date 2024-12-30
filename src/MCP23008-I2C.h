@@ -1,4 +1,5 @@
 #pragma once
+
 /**
  * @file    MCP23008-I2C.h
  * @author  Frank Häfele
@@ -21,10 +22,28 @@ namespace MCP23008_I2C {
 
   constexpr const char *MCP23008_LIB_VERSION   {"1.0.0"};
 
+  /**
+   * @brief constant which states all ok, no error
+   * 
+   */
   constexpr int8_t MCP23008_STATE_OK           {0x00};
   
+  /**
+   * @brief constant which states a wrong pin number was used
+   * 
+   */
   constexpr int8_t MCP23008_ERROR_PIN          {-1};
+
+  /**
+   * @brief constant which states an error during I2C communication
+   * 
+   */
   constexpr int8_t MCP23008_ERROR_I2C          {-2};
+
+  /**
+   * @brief constant which states that there was an error regarding a parameter value
+   * 
+   */
   constexpr int8_t MCP23008_ERROR_VALUE        {-3};
 
   /**
@@ -194,9 +213,9 @@ namespace MCP23008_I2C {
       /**
        * @brief set mask for pinMode in I/O register for all pins at once (INTCON)
        * 
-       * outputMode = 0
+       * 1 = Pin is configured as an input
        * 
-       * inputMode = 1
+       * 0 = Pin is configured as an output
        * 
        * Bit pattern to set
        * in hex:     0x10
