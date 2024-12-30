@@ -77,8 +77,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_m_c_p23008___i2_c_1_1_m_c_p23008-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">MCP23008_I2C::MCP23008 Class Reference</div></div>
 </div><!--header-->
@@ -166,26 +164,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2291589d5d2f3e5c3cc3ebd3846db538" id="r_a2291589d5d2f3e5c3cc3ebd3846db538"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html#a2291589d5d2f3e5c3cc3ebd3846db538">getInterruptPolarity</a> () const</td></tr>
 <tr class="memdesc:a2291589d5d2f3e5c3cc3ebd3846db538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the Interrupt Polarity.  <br /></td></tr>
 <tr class="separator:a2291589d5d2f3e5c3cc3ebd3846db538"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:ab07d5fe61817538cb9c518f93b4e1f7e" id="r_ab07d5fe61817538cb9c518f93b4e1f7e"><td class="memItemLeft" align="right" valign="top">int8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html#ab07d5fe61817538cb9c518f93b4e1f7e">writeReg</a> (uint8_t regAddress, uint8_t value) const</td></tr>
-<tr class="memdesc:ab07d5fe61817538cb9c518f93b4e1f7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C write value to <a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html" title="Class MCP23008.">MCP23008</a> register.  <br /></td></tr>
-<tr class="separator:ab07d5fe61817538cb9c518f93b4e1f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcdcd45be1d8d38fbf93751221d62db3" id="r_abcdcd45be1d8d38fbf93751221d62db3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html#abcdcd45be1d8d38fbf93751221d62db3">readReg</a> (uint8_t regAddress) const</td></tr>
-<tr class="memdesc:abcdcd45be1d8d38fbf93751221d62db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2c Read value of <a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html" title="Class MCP23008.">MCP23008</a> register.  <br /></td></tr>
-<tr class="separator:abcdcd45be1d8d38fbf93751221d62db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a847f0b922976e20e11228c3ace62fecc" id="r_a847f0b922976e20e11228c3ace62fecc"><td class="memItemLeft" align="right" valign="top"><a id="a847f0b922976e20e11228c3ace62fecc" name="a847f0b922976e20e11228c3ace62fecc"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>_address</b></td></tr>
-<tr class="memdesc:a847f0b922976e20e11228c3ace62fecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">address of <a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html" title="Class MCP23008.">MCP23008</a> device <br /></td></tr>
-<tr class="separator:a847f0b922976e20e11228c3ace62fecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4b885dcabb9ebe18b88829d1118a766" id="r_af4b885dcabb9ebe18b88829d1118a766"><td class="memItemLeft" align="right" valign="top"><a id="af4b885dcabb9ebe18b88829d1118a766" name="af4b885dcabb9ebe18b88829d1118a766"></a>
-TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><b>_wire</b></td></tr>
-<tr class="memdesc:af4b885dcabb9ebe18b88829d1118a766"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer of wire instance <br /></td></tr>
-<tr class="separator:af4b885dcabb9ebe18b88829d1118a766"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class <a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html" title="Class MCP23008.">MCP23008</a>. </p>
@@ -650,48 +628,6 @@ TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><b>_wire</b></td></
 
 </div>
 </div>
-<a id="abcdcd45be1d8d38fbf93751221d62db3" name="abcdcd45be1d8d38fbf93751221d62db3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abcdcd45be1d8d38fbf93751221d62db3">&#9670;&#160;</a></span>readReg()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int MCP23008::readReg </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>regAddress</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>I2c Read value of <a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html" title="Class MCP23008.">MCP23008</a> register. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">regAddress</td><td>address of specific register </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int read status</dd></dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">&gt;=0</td><td>register value </td></tr>
-    <tr><td class="paramname">&lt;0</td><td>error code </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a1848f9bb4f2f19559e6e812187489dea" name="a1848f9bb4f2f19559e6e812187489dea"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1848f9bb4f2f19559e6e812187489dea">&#9670;&#160;</a></span>setInterrupt()</h2>
 
@@ -1097,59 +1033,6 @@ TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><b>_wire</b></td></
 
 </div>
 </div>
-<a id="ab07d5fe61817538cb9c518f93b4e1f7e" name="ab07d5fe61817538cb9c518f93b4e1f7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab07d5fe61817538cb9c518f93b4e1f7e">&#9670;&#160;</a></span>writeReg()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int8_t MCP23008::writeReg </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>regAddress</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>I2C write value to <a class="el" href="class_m_c_p23008___i2_c_1_1_m_c_p23008.html" title="Class MCP23008.">MCP23008</a> register. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">regAddress</td><td>address of specific register </td></tr>
-    <tr><td class="paramname">value</td><td>value to write </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int8_t write status</dd></dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">=0</td><td>write OK </td></tr>
-    <tr><td class="paramname">&lt;0</td><td>error code </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="_m_c_p23008-_i2_c_8h_source.html">MCP23008-I2C.h</a></li>
 <li>src/<a class="el" href="_m_c_p23008-_i2_c_8cpp.html">MCP23008-I2C.cpp</a></li>
@@ -1157,7 +1040,7 @@ TwoWire *&#160;</td><td class="memItemRight" valign="bottom"><b>_wire</b></td></
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 30 2024 23:43:53 for MCP23008-I2C by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+Generated on Mon Dec 30 2024 23:54:38 for MCP23008-I2C by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
 </small></address>
 </body>
 </html>
