@@ -1,14 +1,16 @@
-#pragma once
-
 /**
  * @file    MCP23008-I2C.h
  * @author  Frank Häfele
  * @date    27.12.2024
- * @version 1.0.0
+ * @version 1.1.0
  * @brief   MCP23008 Declarations
  * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
+
+#pragma once
+
+#define __MCP23008_I2C_H__
 
 #include "Arduino.h"
 #include "Wire.h"

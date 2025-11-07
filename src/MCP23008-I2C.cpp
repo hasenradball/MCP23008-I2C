@@ -2,7 +2,7 @@
  * @file    MCP23008-I2c.cpp
  * @author  Frank Häfele
  * @date    27.12.2024
- * @version 1.0.0
+ * @version 1.1.0
  * @brief   MCP23008 Function and Class Definitions
  * @see     https://github.com/hasenradball/MCP23008-I2C
  * 

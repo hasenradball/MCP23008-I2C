@@ -1,14 +1,16 @@
-#pragma once
-
 /**
  * @file    MCP23008-Constants.h
  * @author  Frank Häfele
  * @date    27.12.2024
- * @version 1.0.0
+ * @version 1.1.0
  * @brief   MCP23008 Constants and Register short Descriptions
  * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
  */
+
+#pragma once
+
+#define __MCP23008_CONSTANTS_H__
 
 /**
  * @brief Namespace of MCP23008 Constants.
