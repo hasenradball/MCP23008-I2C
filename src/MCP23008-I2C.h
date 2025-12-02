@@ -270,6 +270,18 @@ namespace MCP23008_I2C {
        * @retval  <0: error code
        */
       int read8() const;
+      
+      /**
+       * @brief read 8 bit at once from OLAT register (OLAT)
+       * 
+       * The GPIO register reflects the value on the port.
+       * Reading from this register reads the port.
+       * @return int status value of GPIO register
+       * 
+       * @retval >=0: register value
+       * @retval  <0: error code
+       */
+      int read8OLAT() const;
 
       /**
        * @brief Set the polarity in 8-bit at once in Input polarity register (IPOL)
