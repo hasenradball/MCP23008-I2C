@@ -187,8 +187,8 @@ int8_t MCP23008::write8(uint8_t value) const {
   return writeReg(MCP23008_OLAT_REG, value);
 }
 
-int MCP23008::read8OLAT() const {
-  return readReg(MCP23008_OLAT_REG);
+int MCP23008::read8_reg(uint8_t register) const {
+  return readReg(register);
 }
 
 int MCP23008::read8() const {
