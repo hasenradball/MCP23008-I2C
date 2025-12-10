@@ -187,8 +187,8 @@ int8_t MCP23008::write8(uint8_t value) const {
   return writeReg(MCP23008_OLAT_REG, value);
 }
 
-int MCP23008::read8_reg(uint8_t register) const {
-  return readReg(register);
+int MCP23008::read8_reg(uint8_t reg_addr) const {
+  return readReg(reg_addr);
 }
 
 int MCP23008::read8() const {
@@ -326,12 +326,9 @@ int8_t MCP23008::writeReg(uint8_t regAddress, uint8_t value) const {
 int MCP23008::readReg(uint8_t regAddress) const {
   _wire->beginTransmission(_address);
   _wire->write(regAddress);
-  if (_wire->endTransmission() != 0) {
+  if (_wire->endTransmission() != 0 || _wire->requestFrom(_address, 1) != 1) {
     return MCP23008_ERROR_I2C;
   }
-  uint8_t n = _wire->requestFrom(_address, (uint8_t)1);
-  if (n != 1) {
-    return MCP23008_ERROR_I2C;
-  }
+
   return _wire->read();
 }

@@ -1,7 +1,7 @@
 /**
  * @file    MCP23008-I2C.h
  * @author  Frank Häfele
- * @date    09.12.2025
+ * @date    10.12.2025
  * @version 1.2.0
  * @brief   MCP23008 Declarations
  * @see     https://github.com/hasenradball/MCP23008-I2C
@@ -261,7 +261,7 @@ namespace MCP23008_I2C {
 
       /**
        * @brief read 8 bit at once from GPIO register (GPIO)
-       * for backward compatibilty with older versions*
+       * for backward compatibility with older versions
        * The GPIO register reflects the value on the port.
        * Reading from this register reads the port.
        * @return int status value of GPIO register
@@ -274,12 +274,12 @@ namespace MCP23008_I2C {
       /**
        * @brief read 8 bit at once from a register
        * in uint8_t: address of register
-       * @return int status value of GPIO register
+       * @return int status value of the register
        * 
        * @retval >=0: register value
        * @retval  <0: error code
        */
-      int read8_reg(uint8_t register) const;
+      int read8_reg(uint8_t reg_addr) const;
 
       /**
        * @brief Set the polarity in 8-bit at once in Input polarity register (IPOL)

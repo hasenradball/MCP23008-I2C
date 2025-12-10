@@ -29,6 +29,7 @@ getPullup                    KEYWORD2
 setPinMode8                  KEYWORD2
 write8                       KEYWORD2
 read8                        KEYWORD2
+read8_reg                    KEYWORD2
 setPolarity8                 KEYWORD2
 getPolarity8                 KEYWORD2
 setPullup8                   KEYWORD2
