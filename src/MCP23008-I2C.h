@@ -261,6 +261,7 @@ namespace MCP23008_I2C {
 
       /**
        * @brief read 8 bit at once from GPIO register (GPIO)
+       *
        * The GPIO register reflects the value on the port.
        * Reading from this register reads the port.
        * @return int status value of GPIO register
@@ -272,6 +273,7 @@ namespace MCP23008_I2C {
       
       /**
        * @brief read 8 bit at once from a register
+       *
        * in uint8_t: address of register
        * @return int status value of the register
        * 
