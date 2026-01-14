@@ -1,8 +1,8 @@
 /**
  * @file    MCP23008-I2C.h
  * @author  Frank Häfele
- * @date    10.12.2025
- * @version 1.2.0
+ * @date    14.01.2026
+ * @version 1.2.1
  * @brief   MCP23008 Declarations
  * @see     https://github.com/hasenradball/MCP23008-I2C
  * 
@@ -22,7 +22,7 @@
  */
 namespace MCP23008_I2C {
 
-  constexpr const char *MCP23008_LIB_VERSION   {"1.2.0"};
+  constexpr const char *MCP23008_LIB_VERSION   {"1.2.1"};
 
   /**
    * @brief constant which states all ok, no error
@@ -53,7 +53,7 @@ namespace MCP23008_I2C {
    * 
    */
   class MCP23008 {
-    public:
+   public:
       /**
        * @brief Construct a new MCP23008 object
        * 
@@ -75,15 +75,6 @@ namespace MCP23008_I2C {
        */
       int8_t begin(bool inputPullUp = true) const;
 
-      /**
-       * @brief check connection status
-       * 
-       * @return int8_t status of connection
-       * 
-       * @retval   1: connection OK
-       * @retval  <0: error code
-       */
-      int8_t isConnected() const;
 
       /**
        * @brief Get the address of device
@@ -428,7 +419,17 @@ namespace MCP23008_I2C {
       bool     disableControlRegister(uint8_t mask);
       */
 
-    private:
+   private:
+      /**
+       * @brief checks communication to device
+       * 
+       * @return bool status of communication or connection
+       * 
+       * @retval true: connection OK
+       * @retval false: not connected, wiring failure or wrong address
+       */
+      bool isDevicePresent() const;
+
       /**
        * @brief I2C write value to MCP23008 register
        * 

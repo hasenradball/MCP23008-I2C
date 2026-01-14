@@ -43,6 +43,14 @@ Now you ca use the object and his members as normal like:
 
 Please refer to the examples and the above mentioned documentation files.
 
+### Status Codes of MCP23008
+The following status codes exists:
+
+* MCP23008_STATE_OK     {0};
+* MCP23008_ERROR_PIN    {-1};
+* MCP23008_ERROR_I2C    {-2};
+* MCP23008_ERROR_VALUE  {-3};
+
 # License
 This library is licensed under MIT Licence.
 
